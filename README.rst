@@ -10,7 +10,8 @@ Queries supports multiple replies for a single query sent and will be returned a
 Examples
 --------
 
-.. code-block:: python
+.. code:: python
+
     from nameko_query.responder import query_responder
     class BlockedListener(object):
         name = "service"
@@ -19,7 +20,9 @@ Examples
         def method(self, parameters, message):
             return "hello world"
 
-.. code-block:: python
+
+.. code:: python
+
     from nameko_query.request import ClusterQueryProxy
     def query_request(service_name, method_name, parameters={}):
         with ClusterQueryProxy({"AMQP_URI": "amqp://guest:guest@localhost", timeout=0.05) as cluster_query:
