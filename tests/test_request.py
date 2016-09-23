@@ -2,7 +2,7 @@ from kombu import Connection
 from kombu.messaging import Consumer
 from kombu.transport.pyamqp import Message
 from mock import MagicMock, patch
-from nameko_query.query_request import ClusterQueryProxy
+from nameko_query.request import ClusterQueryProxy
 
 from unittest import TestCase
 
@@ -38,16 +38,16 @@ class MockQueryPollingQueueConsumer(object):
         pass
 
 class QueryRequestTest(TestCase):
-    @patch("nameko_query.query_request.QueryPollingQueueConsumer", return_value=MockQueryPollingQueueConsumer(["dummy"]))
-    @patch("nameko_query.query_responder.Connection", return_value=MagicMock(spec=Connection))
+    @patch("nameko_query.request.QueryPollingQueueConsumer", return_value=MockQueryPollingQueueConsumer(["dummy"]))
+    @patch("nameko_query.responder.Connection", return_value=MagicMock(spec=Connection))
     @patch("kombu.pools.ProducerPool.acquire", return_value=MagicMock())
     def test_running_query(self, mock_consumer, mock_acquire, mock_connection):
         responses = query_request("hello", "service")
         self.assertEqual(len(responses), 1)
         self.assertEqual(responses[0], "dummy")
 
-    @patch("nameko_query.query_request.QueryPollingQueueConsumer", return_value=MockQueryPollingQueueConsumer(["first", "second"]))
-    @patch("nameko_query.query_responder.Connection", return_value=MagicMock(spec=Connection))
+    @patch("nameko_query.request.QueryPollingQueueConsumer", return_value=MockQueryPollingQueueConsumer(["first", "second"]))
+    @patch("nameko_query.responder.Connection", return_value=MagicMock(spec=Connection))
     @patch("kombu.pools.ProducerPool.acquire", return_value=MagicMock())
     def test_multiple_replies(self, mock_consumer, mock_acquire, mock_connection):
         responses = query_request("hello", "service")

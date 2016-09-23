@@ -1,4 +1,4 @@
-from nameko_query.query_responder import QueryResponder, QueryHandler
+from nameko_query.responder import QueryResponder, QueryHandler
 from kombu import Queue, Connection
 from kombu.pools import producers
 from unittest import TestCase
@@ -24,8 +24,8 @@ class QueryResponderTest(TestCase):
     def setUp(self):
         self.qr = QueryResponder({"AMQP_URI": ""}, MagicMock())
 
-    @patch("nameko_query.query_responder.Connection", return_value=MagicMock(spec=Connection))
-    @patch("nameko_query.query_responder.kombu.serialization.dumps", return_value=None)
+    @patch("nameko_query.responder.Connection", return_value=MagicMock(spec=Connection))
+    @patch("nameko_query.responder.kombu.serialization.dumps", return_value=None)
     @patch("kombu.pools.ProducerPool.acquire", return_value=MagicMock())
     def test_send_response(self, mock_acquire, mock_serializer, mock_connection):
         self.qr.send_response("Response", None)
@@ -46,7 +46,7 @@ class QueryConsumerTest(TestCase):
         self.q.method_name = "user"
         self.q.rpc_consumer.container = ServiceContainer({})
 
-    @patch("nameko_query.query_responder.Queue", return_value=MagicMock(spec=Queue))
+    @patch("nameko_query.responder.Queue", return_value=MagicMock(spec=Queue))
     def test_setup(self, mock_queue):
         self.q.rpc_consumer.setup()
         self.assertTrue(self.q.rpc_consumer._registered)

@@ -9,7 +9,7 @@ from nameko.containers import WorkerContext
 from nameko.rpc import MethodProxy, ReplyListener, ServiceProxy
 from nameko.standalone.rpc import ClusterProxy, PollingQueueConsumer, SingleThreadedReplyListener, StandaloneProxyBase
 
-from nameko_query.query_responder import DEFAULT_EXCHANGE, QUERY_EXCHANGE
+from nameko_query.responder import DEFAULT_EXCHANGE, QUERY_EXCHANGE
 
 logger = logging.getLogger(__name__)
 
