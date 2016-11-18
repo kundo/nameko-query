@@ -48,7 +48,7 @@ class QueryResponder(object):
 
             msg = {'result': result, 'error': error}
 
-            logger.debug("Sending message to %s %s: %s", exchange, routing_key, msg)
+            logger.info("Sending message to %s %s: %s", exchange, routing_key, msg)
 
             producer.publish(
                 msg, retry=retry, retry_policy=retry_policy,
