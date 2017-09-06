@@ -27,12 +27,12 @@ class QueryPollingQueueConsumer(PollingQueueConsumer):
             # Normal path, we wait for the timeout before returning anything
             replies = self.replies.pop(correlation_id, None)
             if replies:
-                logger.info("Retrived %s replies", len(replies))
+                logger.info("Retrived %s replies, correlation_id=%s", len(replies), correlation_id)
                 self.provider.handle_messages(replies)
                 return
 
             # Send an empty response in case of no replies
-            logger.info("No replies retrived")
+            logger.info("No replies retrived, correlation_id=%s", correlation_id)
             event = self.provider._reply_events.pop(correlation_id)
             event.send([])
 
@@ -49,7 +49,7 @@ class QueryPollingQueueConsumer(PollingQueueConsumer):
             logger.info("Unknown correlation id: %s", msg_correlation_id)
         if msg_correlation_id not in self.replies:
             self.replies[msg_correlation_id] = []
-        logger.info("Received message %s", body)
+        logger.info("Received message for correlation_id=%s %s", msg_correlation_id, body)
         self.replies[msg_correlation_id].append((body, message))
 
 class QueryReplyListener(ReplyListener):
@@ -112,7 +112,7 @@ class QueryMethodProxy(MethodProxy):
             reply_to_routing_key = reply_listener.routing_key
             reply_event = reply_listener.get_reply_event(correlation_id)
 
-            logger.info("Publishing message to %s %s: %s", exchange, routing_key, msg)
+            logger.info("Publishing message to exchange=%s, routing_key=%s, correlation_id=%s: %s", exchange, routing_key, correlation_id, msg)
             producer.publish(
                 msg,
                 exchange=exchange,
