@@ -29,7 +29,9 @@ setup(
     ],
     keywords='sample setuptools development',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    install_requires=[],
+    install_requires=[
+        'nameko<2.5.0'
+    ],
     extras_require={
         'dev': ['check-manifest'],
         'test': ['coverage', 'pytest', 'tox'],
