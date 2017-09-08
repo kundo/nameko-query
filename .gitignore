@@ -8,6 +8,7 @@ __pycache__/
 *.so
 *~
 .eggs/
+.python-version
 
 # due to using tox and pytest
 .tox
